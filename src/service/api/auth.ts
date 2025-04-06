@@ -1,4 +1,4 @@
-import { User, Credential } from '@/types/users'
+import { User, Credential } from '@/interfaces/users.interface'
 import { axiosInstance } from '.'
 
 export const authApi = {
@@ -12,6 +12,10 @@ export const authApi = {
     return (await axiosInstance.post('auth/logout')).data
   },
   async refresh() {
-    return (await axiosInstance.post('auth/refresh')).data
+    console.log('calling refresh...')
+    return (await axiosInstance.get('auth/refresh')).data
+  },
+  async authCheck() {
+    return (await axiosInstance.get('auth/check')).data
   },
 }

@@ -1,23 +1,13 @@
 import axios from 'axios'
 import { authApi } from './auth'
 import { usersApi } from './users'
+import { API_PREFIX, API_VERSION } from '@/lib/constants'
 
 export const axiosInstance = axios.create({
-  baseURL: '/api/v1',
+  baseURL: `/${API_PREFIX}/${API_VERSION}`,
+  withCredentials: true,
+  withXSRFToken: true,
 })
-
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error) => {
-    return Promise.reject({
-      name: error.response.data.name,
-      message: error.response.data.message,
-      status: error.response.status,
-    })
-  }
-)
 
 export const api = {
   auth: authApi,

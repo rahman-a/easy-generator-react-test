@@ -1,4 +1,4 @@
-import { SliceStateCreator } from '@/types/store'
+import { SliceStateCreator } from '@/interfaces/store.interface'
 
 type State = {
   session: {

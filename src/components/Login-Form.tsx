@@ -24,12 +24,14 @@ import { useLoginQuery } from '@/service/query/auth'
 import { CircleAlert, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { LoginSchemaValidation } from '@/schema/auth'
+import { useAuthContext } from '@/context/Auth-Provider'
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
   const { mutateAsync, isError, error, isPending } = useLoginQuery()
+  const { setAuth } = useAuthContext()
 
   const form = useForm<z.infer<typeof LoginSchemaValidation>>({
     resolver: zodResolver(LoginSchemaValidation),
@@ -42,6 +44,10 @@ export function LoginForm({
   async function onSubmit(values: z.infer<typeof LoginSchemaValidation>) {
     const response = await mutateAsync(values)
     console.log({ response })
+    setAuth({
+      accessToken: response.accesstoken,
+      user: response.user,
+    })
   }
 
   return (

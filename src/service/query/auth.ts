@@ -1,4 +1,4 @@
-import { User, Credential } from '@/types/users'
+import { User, Credential } from '@/interfaces/users.interface'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '../api'
 
@@ -23,8 +23,8 @@ export const useLogoutQuery = () => {
   })
 }
 
-export const useRefreshToken = () => {
-  useQuery({
+export const useRefreshTokenQuery = () => {
+  return useQuery({
     queryKey: ['refresh'],
     queryFn: () => api.auth.refresh(),
   })
