@@ -1,10 +1,12 @@
 import axios from 'axios'
+import { authApi } from './auth'
+import { usersApi } from './users'
 
-export const api = axios.create({
+export const axiosInstance = axios.create({
   baseURL: '/api/v1',
 })
 
-api.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     return response
   },
@@ -16,3 +18,8 @@ api.interceptors.response.use(
     })
   }
 )
+
+export const api = {
+  auth: authApi,
+  users: usersApi,
+}

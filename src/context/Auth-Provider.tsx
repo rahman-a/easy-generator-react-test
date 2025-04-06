@@ -21,6 +21,7 @@ const AuthContext = createContext<AuthContextProps>(intitalState)
 
 const AuthProvider = ({ children }: React.ComponentProps<'div'>) => {
   const [token, setToken] = useState<string>()
+
   return (
     <AuthContext.Provider value={{ token, setToken }}>
       {children}
