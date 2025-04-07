@@ -94,8 +94,8 @@ const AuthProvider = ({ children }: React.ComponentProps<'div'>) => {
         }
         if (!request?._retry) {
           return Promise.reject({
-            name: (error.response?.data as { name: string }).name,
-            message: (error.response?.data as { message: string }).message,
+            name: (error.response?.data as { name: string })?.name,
+            message: (error.response?.data as { message: string })?.message,
             status: error.response?.status,
           })
         }

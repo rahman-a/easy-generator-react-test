@@ -5,13 +5,6 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    proxy: {
-      '/api/v1': 'http://localhost:5000',
-    },
-    host: '0.0.0.0',
-    port: 5173,
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
