@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import {
   Form,
   FormControl,
@@ -20,17 +20,20 @@ import {
   FormLabel,
   FormMessage,
 } from './ui/form'
-import { CircleAlert, Loader2 } from 'lucide-react'
+import { CircleAlert, CircleCheckBigIcon, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { useRegisterQuery } from '@/service/query/auth'
 import PasswordMatcher from './Password-Matcher'
 import { RegistrationSchemaValidation } from '@/schema/auth'
+import { useEffect } from 'react'
 
 export function RegistrationForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
-  const { mutateAsync, isError, error, isPending } = useRegisterQuery()
+  const navigate = useNavigate()
+  const { data, mutateAsync, isError, error, isSuccess, isPending } =
+    useRegisterQuery()
 
   const form = useForm<z.infer<typeof RegistrationSchemaValidation>>({
     resolver: zodResolver(RegistrationSchemaValidation),
@@ -49,8 +52,25 @@ export function RegistrationForm({
 
   const passwordWatch = form.watch('password')
 
+  useEffect(() => {
+    const redirectTimeout = setTimeout(() => {
+      if (isSuccess) navigate('/login', { replace: true })
+    }, 2500)
+
+    return () => clearTimeout(redirectTimeout)
+  }, [isSuccess])
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
+      {isSuccess && (
+        <Alert variant='default' className='text-green-500'>
+          <CircleCheckBigIcon className='w-4 h-4' />
+          <AlertTitle>Created</AlertTitle>
+          <AlertDescription className='text-green-500'>
+            {data.message}
+          </AlertDescription>
+        </Alert>
+      )}
       {isError && (
         <Alert variant='destructive'>
           <CircleAlert className='w-4 h-4' />
