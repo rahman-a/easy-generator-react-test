@@ -25,12 +25,13 @@ import { CircleAlert, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { LoginSchemaValidation } from '@/schema/auth'
 import { useAuthContext } from '@/context/Auth-Provider'
+import { useEffect } from 'react'
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
-  const { mutateAsync, isError, error, isPending } = useLoginQuery()
+  const { data, mutate, isError, error, isSuccess, isPending } = useLoginQuery()
   const { setAuth } = useAuthContext()
 
   const form = useForm<z.infer<typeof LoginSchemaValidation>>({
@@ -42,13 +43,17 @@ export function LoginForm({
   })
 
   async function onSubmit(values: z.infer<typeof LoginSchemaValidation>) {
-    const response = await mutateAsync(values)
-    console.log({ response })
-    setAuth({
-      accessToken: response.accesstoken,
-      user: response.user,
-    })
+    mutate(values)
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      setAuth({
+        accessToken: data.accesstoken,
+        user: data.user,
+      })
+    }
+  }, [isSuccess])
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>

@@ -44,8 +44,7 @@ export function RegistrationForm({
   async function onSubmit(
     values: z.infer<typeof RegistrationSchemaValidation>
   ) {
-    const response = await mutateAsync(values)
-    console.log({ values, response })
+    await mutateAsync(values)
   }
 
   const passwordWatch = form.watch('password')

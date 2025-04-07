@@ -1,5 +1,4 @@
 import { LoginForm } from '@/components/Login-Form'
-import { Link } from 'react-router'
 
 export default function Login() {
   return (
@@ -7,7 +6,6 @@ export default function Login() {
       <div className='w-full max-w-sm'>
         <LoginForm />
       </div>
-      <Link to='/dashboard'>Dashboard</Link>
     </div>
   )
 }

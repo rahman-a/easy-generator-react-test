@@ -19,6 +19,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Link } from 'react-router'
+import { useLogoutQuery } from '@/service/query/auth'
 
 export function NavUser({
   user,
@@ -29,6 +30,7 @@ export function NavUser({
     avatar?: string
   }
 }) {
+  const { mutate: logoutHandler } = useLogoutQuery()
   const { isMobile } = useSidebar()
 
   return (
@@ -77,7 +79,12 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              <button className='cursor-pointer w-full flex'>Logout</button>
+              <button
+                className='cursor-pointer w-full flex'
+                onClick={() => logoutHandler()}
+              >
+                Logout
+              </button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

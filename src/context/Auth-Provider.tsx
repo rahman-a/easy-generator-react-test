@@ -24,23 +24,30 @@ type AuthProps = {
 type AuthContextProps = {
   auth: AuthProps | null | undefined
   setAuth: React.Dispatch<React.SetStateAction<AuthProps | null | undefined>>
+  isAuthChecking: boolean
 }
 
 const intitalState: AuthContextProps = {
   auth: null,
   setAuth: () => null,
+  isAuthChecking: true,
 }
 
 const AuthContext = createContext<AuthContextProps>(intitalState)
 
 const AuthProvider = ({ children }: React.ComponentProps<'div'>) => {
   const [auth, setAuth] = useState<AuthContextProps['auth']>()
+  const [isAuthChecking, setIsAuthChecking] = useState<boolean>(true)
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const response = await api.auth.authCheck()
-      console.log('response: ', response)
-      setAuth({ ...response })
+      setIsAuthChecking(true)
+      try {
+        const response = await api.auth.authCheck()
+        setAuth({ ...response })
+      } finally {
+        setIsAuthChecking(false)
+      }
     }
     checkAuthentication()
   }, [])
@@ -83,12 +90,14 @@ const AuthProvider = ({ children }: React.ComponentProps<'div'>) => {
             }
           } catch {
             setAuth(null)
-            return Promise.reject({
-              name: (error.response.data as { name: string }).name,
-              message: (error.response.data as { message: string }).message,
-              status: error.response.status,
-            })
           }
+        }
+        if (!request?._retry) {
+          return Promise.reject({
+            name: (error.response?.data as { name: string }).name,
+            message: (error.response?.data as { message: string }).message,
+            status: error.response?.status,
+          })
         }
       }
     )
@@ -97,7 +106,7 @@ const AuthProvider = ({ children }: React.ComponentProps<'div'>) => {
     }
   }, [])
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, isAuthChecking }}>
       {children}
     </AuthContext.Provider>
   )

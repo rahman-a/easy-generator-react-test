@@ -3,19 +3,18 @@ import { axiosInstance } from '.'
 
 export const authApi = {
   async register(data: User) {
-    return (await axiosInstance.post('auth/register', data)).data
+    return (await axiosInstance.post('auth/register', data))?.data
   },
   async login(data: Credential) {
-    return (await axiosInstance.post('auth/login', data)).data
+    return (await axiosInstance.post('auth/login', data))?.data
   },
   async logout() {
-    return (await axiosInstance.post('auth/logout')).data
+    return (await axiosInstance.post('auth/logout'))?.data
   },
   async refresh() {
-    console.log('calling refresh...')
-    return (await axiosInstance.get('auth/refresh')).data
+    return (await axiosInstance.get('auth/refresh'))?.data
   },
   async authCheck() {
-    return (await axiosInstance.get('auth/check')).data
+    return (await axiosInstance.get('auth/check'))?.data
   },
 }

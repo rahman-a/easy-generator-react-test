@@ -1,3 +1,5 @@
+import AuthRoute from '@/components/Auth-Route'
+import NonAuthRoute from '@/components/Non-Auth-Route'
 import Dashboard from '@/pages/Dashboard'
 import Error from '@/pages/Error'
 import Layout from '@/pages/Layout'
@@ -10,7 +12,11 @@ import { createBrowserRouter, RouteObject } from 'react-router'
 const routers: RouteObject[] = [
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <AuthRoute>
+        <Layout />
+      </AuthRoute>
+    ),
     errorElement: <Error />,
     children: [
       {
@@ -25,11 +31,19 @@ const routers: RouteObject[] = [
   },
   {
     path: '/login',
-    element: <Login />,
+    element: (
+      <NonAuthRoute>
+        <Login />
+      </NonAuthRoute>
+    ),
   },
   {
     path: '/signup',
-    element: <Signup />,
+    element: (
+      <NonAuthRoute>
+        <Signup />
+      </NonAuthRoute>
+    ),
   },
   {
     path: '*',

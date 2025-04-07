@@ -1,6 +1,7 @@
 import { User, Credential } from '@/interfaces/users.interface'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '../api'
+import { useAuthContext } from '@/context/Auth-Provider'
 
 export const useRegisterQuery = () => {
   return useMutation({
@@ -17,9 +18,13 @@ export const useLoginQuery = () => {
 }
 
 export const useLogoutQuery = () => {
+  const { setAuth } = useAuthContext()
   return useMutation({
     mutationKey: ['logout'],
     mutationFn: () => api.auth.logout(),
+    onSuccess() {
+      setAuth(null)
+    },
   })
 }
 
